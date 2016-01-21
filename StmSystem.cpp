@@ -39,7 +39,7 @@ StmSystem::StmSystem() :
     mDma1(BaseAddress::DMA1),
     mDma2(BaseAddress::DMA2),
     //    mUsart1(BaseAddress::USART1, &mRcc, ClockControl::Clock::APB2),
-    mUsart2(BaseAddress::USART2, &mRcc, ClockControl::Clock::APB1, 256, 256),
+    mUsart2(BaseAddress::USART2, &mRcc, ClockControl::Clock::APB1, 512, 32),
     //    mUsart3(BaseAddress::USART3, &mRcc, ClockControl::Clock::APB1),
     //    mUart4(BaseAddress::UART4, &mRcc, ClockControl::Clock::APB1),
     //    mUart5(BaseAddress::UART5, &mRcc, ClockControl::Clock::APB1),
