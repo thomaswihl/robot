@@ -39,18 +39,18 @@ StmSystem::StmSystem() :
     mDma1(BaseAddress::DMA1),
     mDma2(BaseAddress::DMA2),
     //    mUsart1(BaseAddress::USART1, &mRcc, ClockControl::Clock::APB2),
-    mUsart2(BaseAddress::USART2, &mRcc, ClockControl::Clock::APB1, 512, 32),
+    mUsart2(BaseAddress::USART2, &mRcc, ClockControl::ClockSpeed::APB1, 512, 32),
     //    mUsart3(BaseAddress::USART3, &mRcc, ClockControl::Clock::APB1),
     //    mUart4(BaseAddress::UART4, &mRcc, ClockControl::Clock::APB1),
     //    mUart5(BaseAddress::UART5, &mRcc, ClockControl::Clock::APB1),
     //    mUsart6(BaseAddress::USART6, &mRcc, ClockControl::Clock::APB2),
     mDebug(mUsart2),
-    mSpi1(BaseAddress::SPI1, &mRcc, ClockControl::Clock::APB2),
-    mSpi2(BaseAddress::SPI2, &mRcc, ClockControl::Clock::APB1),
-    mSpi3(BaseAddress::SPI3, &mRcc, ClockControl::Clock::APB1),
-    mI2C1(BaseAddress::I2C1, &mRcc, ClockControl::Clock::APB1),
-    mI2C2(BaseAddress::I2C2, &mRcc, ClockControl::Clock::APB1),
-    mI2C3(BaseAddress::I2C3, &mRcc, ClockControl::Clock::APB1),
+    mSpi1(BaseAddress::SPI1, &mRcc, ClockControl::ClockSpeed::APB2),
+    mSpi2(BaseAddress::SPI2, &mRcc, ClockControl::ClockSpeed::APB1),
+    mSpi3(BaseAddress::SPI3, &mRcc, ClockControl::ClockSpeed::APB1),
+    mI2C1(BaseAddress::I2C1, &mRcc, ClockControl::ClockSpeed::APB1),
+    mI2C2(BaseAddress::I2C2, &mRcc, ClockControl::ClockSpeed::APB1),
+    mI2C3(BaseAddress::I2C3, &mRcc, ClockControl::ClockSpeed::APB1),
     mFlash(BaseAddress::FLASH, mRcc, Flash::AccessSize::x32),
     mFpu(BaseAddress::FPU),
     mIWdg(BaseAddress::IWDG)
@@ -129,10 +129,10 @@ void StmSystem::printInfo()
     if (rr & ClockControl::Reset::BrownOut) printf("BROWN OUT   ");
     std::printf("\n");
     std::printf("CLOCK   : System = %luMHz, AHB = %luMHz, APB1 = %luMHz, APB2 = %luMHz\n",
-                mRcc.clock(ClockControl::Clock::System) / 1000000,
-                mRcc.clock(ClockControl::Clock::AHB) / 1000000,
-                mRcc.clock(ClockControl::Clock::APB1) / 1000000,
-                mRcc.clock(ClockControl::Clock::APB2) / 1000000);
+                mRcc.clock(ClockControl::ClockSpeed::System) / 1000000,
+                mRcc.clock(ClockControl::ClockSpeed::AHB) / 1000000,
+                mRcc.clock(ClockControl::ClockSpeed::APB1) / 1000000,
+                mRcc.clock(ClockControl::ClockSpeed::APB2) / 1000000);
     std::printf("BOGOMIPS: %lu.%lu\n", bogoMips() / 1000000, bogoMips() % 1000000);
     std::printf("RAM     : %luk heap free, %luk heap used, %luk bss used, %lik data used.\n", (memFree() + 512) / 1024, (memUsed() + 512) / 1024, (memBssUsed() + 512) / 1024, (memDataUsed() + 512) / 1024);
     std::printf("STACK   : %luk free, %luk used, %luk max used.\n", (stackFree() + 512) / 1024, (stackUsed() + 512) / 1024, (stackMaxUsed() + 512) / 1024);
