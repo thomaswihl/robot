@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef STMSYSTEM_H
-#define STMSYSTEM_H
+#ifndef F7SYSTEM_H
+#define F7SYSTEM_H
 
 #include "System.h"
 #include "ClockControl.h"
@@ -35,7 +35,7 @@
 #include "i2c.h"
 #include "IndependentWatchdog.h"
 
-class StmSystem : public System
+class F7System : public System
 {
 public:
     struct BaseAddress
@@ -199,11 +199,11 @@ public:
     Dma mDma1;
     Dma mDma2;
 //    Serial mUsart1;
-    Stream mUsart2;
+//    Stream mUsart2;
 //    Serial mUsart3;
 //    Serial mUart4;
 //    Serial mUart5;
-//    Serial mUsart6;
+    Stream mUsart6;
     Stream& mDebug;
     Spi mSpi1;
     Spi mSpi2;
@@ -215,8 +215,8 @@ public:
     FpuControl mFpu;
     IndependentWatchdog mIWdg;
 
-    StmSystem();
-    virtual ~StmSystem();
+    F7System();
+    virtual ~F7System();
 
     virtual inline void handleInterrupt(uint32_t index) { mNvic.handle(index); }
     virtual void handleTrap(System::TrapIndex index, unsigned int* stackPointer);
@@ -233,4 +233,4 @@ private:
     void init();
 };
 
-#endif // STMSYSTEM_H
+#endif // F7SYSTEM_H

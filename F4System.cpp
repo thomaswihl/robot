@@ -16,11 +16,11 @@
  *
  */
 
-#include "StmSystem.h"
+#include "F4System.h"
 
 #include <cstdio>
 
-StmSystem::StmSystem() :
+F4System::F4System() :
     System(BaseAddress::SCB),
     mGpioA(BaseAddress::GPIOA),
     mGpioB(BaseAddress::GPIOB),
@@ -31,7 +31,7 @@ StmSystem::StmSystem() :
     mGpioG(BaseAddress::GPIOG),
     mGpioH(BaseAddress::GPIOH),
     mGpioI(BaseAddress::GPIOI),
-    mRcc(BaseAddress::RCC, 8000000),
+    mRcc(BaseAddress::RCC),
     mExtI(BaseAddress::EXTI, 23),
     mNvic(BaseAddress::NVIC, 82),
     mSysTick(BaseAddress::STK, &mRcc),
@@ -58,11 +58,11 @@ StmSystem::StmSystem() :
     init();
 }
 
-StmSystem::~StmSystem()
+F4System::~F4System()
 {
 }
 
-void StmSystem::handleTrap(System::TrapIndex index, unsigned int* stackPointer)
+void F4System::handleTrap(System::TrapIndex index, unsigned int* stackPointer)
 {
     mDebug.configDma(nullptr, nullptr);
     mDebug.configInterrupt(nullptr);
@@ -72,7 +72,7 @@ void StmSystem::handleTrap(System::TrapIndex index, unsigned int* stackPointer)
     mRcc.resetClock();
 }
 
-void StmSystem::init()
+void F4System::init()
 {
     mRcc.setSystemClock(168000000);
     mRcc.enable(ClockControl::Function::Usart2);
@@ -105,17 +105,17 @@ void StmSystem::init()
 
 }
 
-void StmSystem::consoleRead(char *msg, unsigned int len)
+void F4System::consoleRead(char *msg, unsigned int len)
 {
     mDebug.read(msg, len);
 }
 
-void StmSystem::consoleWrite(const char *msg, unsigned int len)
+void F4System::consoleWrite(const char *msg, unsigned int len)
 {
     mDebug.write(msg, len);
 }
 
-void StmSystem::printInfo()
+void F4System::printInfo()
 {
     updateBogoMips();
     ClockControl::Reset::Reason rr = mRcc.resetReason();

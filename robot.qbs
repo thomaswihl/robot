@@ -9,8 +9,10 @@ Project {
         type: "application" // To suppress bundle generation on Mac
         consoleApplication: true
         files: [
-            "StmSystem.cpp",
-            "StmSystem.h",
+            "F4System.cpp",
+            "F4System.h",
+            "F7System.cpp",
+            "F7System.h",
             "main.cpp",
         ]
 
@@ -18,7 +20,8 @@ Project {
         cpp.cxxLanguageVersion: "c++11"
         cpp.debugInformation: true
         cpp.optimization: "debug"
-        cpp.linkerScripts: [ "stm32f407vg.ld" ]
+        //cpp.linkerScripts: [ "stm32f407vg.ld" ]
+        cpp.linkerScripts: [ "stm32f746g.ld" ]
         cpp.positionIndependentCode: false
 
         Depends { name: "wos" }
