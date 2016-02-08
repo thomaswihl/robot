@@ -56,6 +56,8 @@ public:
             GPIOG = 0x40021800,
             GPIOH = 0x40021c00,
             GPIOI = 0x40022000,
+            GPIOJ = 0x40022400,
+            GPIOK = 0x40022800,
             I2C1 = 0x40005400,
             I2C2 = 0x40005800,
             I2C3 = 0x40005C00,
@@ -90,6 +92,7 @@ public:
             USART3 = 0x40004800,
             USART6 = 0x40011400,
             SDIO = 0x40012c00,
+            LCD = 0x40016800,
         };
     };
 
@@ -191,6 +194,8 @@ public:
     Gpio mGpioG;
     Gpio mGpioH;
     Gpio mGpioI;
+    Gpio mGpioJ;
+    Gpio mGpioK;
     ClockControl mRcc;
     ExternalInterrupt mExtI;
     InterruptController mNvic;

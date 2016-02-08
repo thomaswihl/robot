@@ -31,6 +31,8 @@ F7System::F7System() :
     mGpioG(BaseAddress::GPIOG),
     mGpioH(BaseAddress::GPIOH),
     mGpioI(BaseAddress::GPIOI),
+    mGpioJ(BaseAddress::GPIOJ),
+    mGpioK(BaseAddress::GPIOK),
     mRcc(BaseAddress::RCC),
     mExtI(BaseAddress::EXTI, 23),
     mNvic(BaseAddress::NVIC, 82),
@@ -91,11 +93,9 @@ void F7System::init()
     mDebug.enable(Device::All);
 
     // USART2 TX
-    mGpioC.configOutput(Gpio::Index::Pin6, Gpio::OutputType::PushPull, Gpio::Pull::None, Gpio::Speed::Low);
-    mGpioC.setAlternate(Gpio::Index::Pin6, Gpio::AltFunc::USART6);
+    mGpioC.configAlternate(Gpio::Index::Pin6, Gpio::AltFunc::USART6);
     // USART2 RX
-    mGpioC.configInput(Gpio::Index::Pin7, Gpio::Pull::Down);
-    mGpioC.setAlternate(Gpio::Index::Pin7, Gpio::AltFunc::USART6);
+    mGpioC.configAlternate(Gpio::Index::Pin7, Gpio::AltFunc::USART6, Gpio::Speed::Medium, Gpio::Pull::Down);
 
     mFlash.set(Flash::Feature::InstructionCache, true);
     mFlash.set(Flash::Feature::DataCache, true);

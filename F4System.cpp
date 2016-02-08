@@ -91,11 +91,9 @@ void F4System::init()
     mDebug.enable(Device::All);
 
     // USART2 TX
-    mGpioA.configOutput(Gpio::Index::Pin2, Gpio::OutputType::PushPull, Gpio::Pull::None, Gpio::Speed::Low);
-    mGpioA.setAlternate(Gpio::Index::Pin2, Gpio::AltFunc::USART2);
+    mGpioA.configAlternate(Gpio::Index::Pin2, Gpio::AltFunc::USART2);
     // USART2 RX
-    mGpioA.configInput(Gpio::Index::Pin3, Gpio::Pull::Down);
-    mGpioA.setAlternate(Gpio::Index::Pin3, Gpio::AltFunc::USART2);
+    mGpioA.configAlternate(Gpio::Index::Pin3, Gpio::AltFunc::USART2, Gpio::Speed::Medium, Gpio::Pull::Down);
 
     mFlash.set(Flash::Feature::InstructionCache, true);
     mFlash.set(Flash::Feature::DataCache, true);

@@ -27,7 +27,7 @@ Project {
         Depends { name: "wos" }
 //        cpp.includePaths: [".", wos.sourceDirectory]
         cpp.libraryPaths: ["../build-wos-stm32-Debug/qtc_stm32_4f87d225-debug/install-root/", "../build-wos-stm32-Debug/qtc_stm32_4f87d225-debug/install-root/"]
-        cpp.staticLibraries: [ "wos" ]
+        cpp.staticLibraries: [ "wos", "m" ]
 
         cpp.commonCompilerFlags: [
             "-mcpu=cortex-m4",
