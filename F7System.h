@@ -185,18 +185,6 @@ public:
         };
     };
 
-    Gpio mGpioA;
-    Gpio mGpioB;
-    Gpio mGpioC;
-    Gpio mGpioD;
-    Gpio mGpioE;
-    Gpio mGpioF;
-    Gpio mGpioG;
-    Gpio mGpioH;
-    Gpio mGpioI;
-    Gpio mGpioJ;
-    Gpio mGpioK;
-    ClockControl mRcc;
     ExternalInterrupt mExtI;
     InterruptController mNvic;
     SysTickControl mSysTick;
@@ -226,7 +214,6 @@ public:
     virtual inline void handleInterrupt(uint32_t index) { mNvic.handle(index); }
     virtual void handleTrap(System::TrapIndex index, unsigned int* stackPointer);
 
-    void printInfo();
     virtual void usleep(unsigned int us) { mSysTick.usleep(us); }
     virtual uint64_t ns() { return mSysTick.ns(); }
     virtual void handleSysTick() { mSysTick.tick(); }

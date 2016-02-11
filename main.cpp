@@ -12,90 +12,26 @@ static F7System sys;
 int main()
 {
     System::Event* event;
-    sys.mRcc.enable(ClockControl::Function::GpioD);
 
-    sys.mGpioD.configOutput(Gpio::Index::Pin12, Gpio::OutputType::PushPull);
-    sys.mGpioD.configOutput(Gpio::Index::Pin13, Gpio::OutputType::PushPull);
-    sys.mGpioD.configOutput(Gpio::Index::Pin14, Gpio::OutputType::PushPull);
-    sys.mGpioD.configOutput(Gpio::Index::Pin15, Gpio::OutputType::PushPull);
+//    sys.configOutput("d12-15");
 
-    Gpio::Pin led0(sys.mGpioD, Gpio::Index::Pin12);
-    Gpio::Pin led1(sys.mGpioD, Gpio::Index::Pin13);
-    Gpio::Pin led2(sys.mGpioD, Gpio::Index::Pin14);
-    Gpio::Pin led3(sys.mGpioD, Gpio::Index::Pin15);
+//    Gpio::Pin led0(*sys.gpio('D'), Gpio::Index::Pin12);
+//    Gpio::Pin led1(*sys.gpio('D'), Gpio::Index::Pin13);
+//    Gpio::Pin led2(*sys.gpio('D'), Gpio::Index::Pin14);
+//    Gpio::Pin led3(*sys.gpio('D'), Gpio::Index::Pin15);
 
-    led0.set();
+//    led0.set();
     sys.printInfo();
 
-    // RK043FN48H LCD 480x272
-    /*hLtdcHandler.Init.HorizontalSync = (RK043FN48H_HSYNC - 1);
-    hLtdcHandler.Init.VerticalSync = (RK043FN48H_VSYNC - 1);
-    hLtdcHandler.Init.AccumulatedHBP = (RK043FN48H_HSYNC + RK043FN48H_HBP - 1);
-    hLtdcHandler.Init.AccumulatedVBP = (RK043FN48H_VSYNC + RK043FN48H_VBP - 1);
-    hLtdcHandler.Init.AccumulatedActiveH = (RK043FN48H_HEIGHT + RK043FN48H_VSYNC + RK043FN48H_VBP - 1);
-    hLtdcHandler.Init.AccumulatedActiveW = (RK043FN48H_WIDTH + RK043FN48H_HSYNC + RK043FN48H_HBP - 1);
-    hLtdcHandler.Init.TotalHeigh = (RK043FN48H_HEIGHT + RK043FN48H_VSYNC + RK043FN48H_VBP + RK043FN48H_VFP - 1);
-    hLtdcHandler.Init.TotalWidth = (RK043FN48H_WIDTH + RK043FN48H_HSYNC + RK043FN48H_HBP + RK043FN48H_HFP - 1);
-    */
+    sys.clockControl()->setSaiClock(9000000);
+    sys.clockControl()->enable(ClockControl::Function::Ltdc);
+    sys.configAlternate("G12", Gpio::AltFunc::LCD_AF9, Gpio::Speed::Fast);
+    sys.configAlternate("E4,I9-10,I13-15,J0-11,J13-15,K0-2,K4-7", Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
+    Gpio::ConfigurablePin lcdDisp(*sys.gpio('I'), Gpio::Index::Pin12);
+    lcdDisp.configOutput(Gpio::OutputType::PushPull, Gpio::Speed::Fast);
+    Gpio::ConfigurablePin lcdBacklight(*sys.gpio('K'), Gpio::Index::Pin3);
+    lcdBacklight.configOutput(Gpio::OutputType::PushPull, Gpio::Speed::Fast);
 
-//#define  RK043FN48H_WIDTH    ((uint16_t)480)          /* LCD PIXEL WIDTH            */
-//#define  RK043FN48H_HEIGHT   ((uint16_t)272)          /* LCD PIXEL HEIGHT           */
-//#define  RK043FN48H_HSYNC            ((uint16_t)41)   /* Horizontal synchronization */
-//#define  RK043FN48H_HBP              ((uint16_t)13)   /* Horizontal back porch      */
-//#define  RK043FN48H_HFP              ((uint16_t)32)   /* Horizontal front porch     */
-//#define  RK043FN48H_VSYNC            ((uint16_t)10)   /* Vertical synchronization   */
-//#define  RK043FN48H_VBP              ((uint16_t)2)    /* Vertical back porch        */
-//#define  RK043FN48H_VFP              ((uint16_t)2)    /* Vertical front porch       */
-//#define  RK043FN48H_FREQUENCY_DIVIDER    5            /* LCD Frequency divider      */
-
-    /* RK043FN48H LCD clock configuration */
-    /* PLLSAI_VCO Input = HSE_VALUE/PLL_M = 1 Mhz */
-    /* PLLSAI_VCO Output = PLLSAI_VCO Input * PLLSAIN = 192 Mhz */
-    /* PLLLCDCLK = PLLSAI_VCO Output/PLLSAIR = 192/5 = 38.4 Mhz */
-    /* LTDC clock frequency = PLLLCDCLK / LTDC_PLLSAI_DIVR_4 = 38.4/4 = 9.6Mhz */
-//    periph_clk_init_struct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-//    periph_clk_init_struct.PLLSAI.PLLSAIN = 192;
-//    periph_clk_init_struct.PLLSAI.PLLSAIR = RK043FN48H_FREQUENCY_DIVIDER;
-//    periph_clk_init_struct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
-//    HAL_RCCEx_PeriphCLKConfig(&periph_clk_init_struct);
-
-    sys.mRcc.enable(ClockControl::Function::GpioE);
-    sys.mRcc.enable(ClockControl::Function::GpioG);
-    sys.mRcc.enable(ClockControl::Function::GpioI);
-    sys.mRcc.enable(ClockControl::Function::GpioJ);
-    sys.mRcc.enable(ClockControl::Function::GpioK);
-    sys.mRcc.setSaiClock(9000000);
-    sys.mRcc.enable(ClockControl::Function::Ltdc);
-    sys.mGpioE.configAlternate(Gpio::Index::Pin4, Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
-    sys.mGpioG.configAlternate(Gpio::Index::Pin12, Gpio::AltFunc::LCD_AF9, Gpio::Speed::Fast);
-    for (int i = 9; i <= 10; ++i)
-    {
-        sys.mGpioI.configAlternate(static_cast<Gpio::Index>(i), Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
-    }
-    Gpio::Pin lcdDisp(sys.mGpioI, Gpio::Index::Pin12);
-    sys.mGpioI.configOutput(Gpio::Index::Pin12, Gpio::OutputType::PushPull, Gpio::Speed::Fast);
-    for (int i = 13; i <= 15; ++i)
-    {
-        sys.mGpioI.configAlternate(static_cast<Gpio::Index>(i), Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
-    }
-    for (int i = 0; i <= 11; ++i)
-    {
-        sys.mGpioJ.configAlternate(static_cast<Gpio::Index>(i), Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
-    }
-    for (int i = 13; i <= 15; ++i)
-    {
-        sys.mGpioJ.configAlternate(static_cast<Gpio::Index>(i), Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
-    }
-    for (int i = 0; i <= 2; ++i)
-    {
-        sys.mGpioK.configAlternate(static_cast<Gpio::Index>(i), Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
-    }
-    Gpio::Pin lcdBacklight(sys.mGpioK, Gpio::Index::Pin3);
-    sys.mGpioK.configOutput(Gpio::Index::Pin3, Gpio::OutputType::PushPull, Gpio::Speed::Fast);
-    for (int i = 4; i <= 7; ++i)
-    {
-        sys.mGpioK.configAlternate(static_cast<Gpio::Index>(i), Gpio::AltFunc::LCD_AF14, Gpio::Speed::Fast);
-    }
     LcdController lcd(F7System::BaseAddress::LCD, 480, 272);
     //lcd.config(41, 2, 2, 10, 2, 2);
     lcd.config(41, 13, 32, 10, 2, 2);
@@ -137,21 +73,21 @@ int main()
     interpreter.add(new CmdHelp());
     interpreter.add(new CmdRead());
     interpreter.add(new CmdWrite());
-    Gpio* gpio[] = { &sys.mGpioA, &sys.mGpioB, &sys.mGpioC, &sys.mGpioD, &sys.mGpioE, &sys.mGpioF, &sys.mGpioG, &sys.mGpioH, &sys.mGpioI, &sys.mGpioJ, &sys.mGpioK };
-    interpreter.add(new CmdPin(gpio, sizeof(gpio) / sizeof(gpio[0])));
+    interpreter.add(new CmdPin(sys.gpio(), sys.gpioCount()));
+
     InterruptController::Line timer5Irq(sys.mNvic, F7System::InterruptIndex::TIM5);
     Timer timer5(F7System::BaseAddress::TIM5, ClockControl::ClockSpeed::APB1);
 //    timer5.setInterrupt(Timer::InterruptType::CaptureCompare, &timer5Irq);
-    interpreter.add(new CmdMeasureClock(sys.mRcc, timer5));
+    interpreter.add(new CmdMeasureClock(*sys.clockControl(), timer5));
     interpreter.start();
 
     while (true)
     {
         if (sys.waitForEvent(event) && event != nullptr)
         {
-            led1.set();
+//            led1.set();
             event->callback();
-            led1.reset();
+//            led1.reset();
         }
 
     }
