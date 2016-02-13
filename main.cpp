@@ -64,29 +64,56 @@ int main()
     lcd.config(41, 2, 2, 10, 2, 2);
     //lcd.configSignals(LcdController::Polarity::ActiveLow, LcdController::Polarity::ActiveLow, LcdController::Polarity::ActiveLow, LcdController::Polarity::ActiveLow);
     int width = 480;
-    uint8_t* buffer = (uint8_t*)malloc(width*272*1);
-    uint8_t* p = buffer;
+    uint32_t* buffer = (uint32_t*)F7System::BaseAddress::FMC_BANK5;
+    uint32_t* p = buffer;
 
-    for (int i = 0; i < 256; ++i) lcd.setPaletteEntry(LcdController::Layer::Layer0, i, i, i, 0);
+    //for (int i = 0; i < 256; ++i) lcd.setPaletteEntry(LcdController::Layer::Layer0, i, i, i, 0);
 
     for (int y = 0; y < 272; ++y)
     {
         for (int x = 0; x < width; ++x)
         {
-            int r = (int)sqrtf(x*x + y*y);
-            if (r > 255)
+            int i = (int)sqrtf(x*x + y*y) * 6;
+            uint8_t r = 0, g = 0, b = 0;
+            uint8_t m = i;
+            if (i < 256)
             {
-                r -= 256;
-                r = 255 - r;
+                r = i;
             }
-            if (r < 0)
+            else if (i < 512)
             {
-                r = -r;
+                r = 255;
+                g = m;
             }
-            *p++ = r;
+            else if (i < 512+256)
+            {
+                r = 255 - m;
+                g = 255;
+            }
+            else if (i < 1024)
+            {
+                g = 255;
+                b = m;
+            }
+            else if (i < 1024+256)
+            {
+                g = 255 - m;
+                b = 255;
+            }
+            else if (i < 1024+512)
+            {
+                r = m;
+                b = 255;
+            }
+            else if (i < 1024+512+256)
+            {
+                r = 255-m;
+                b = 255-m;
+            }
+            *p++ = (255 << 24) | (r << 16) | (g << 8) | b;
         }
     }
-    LcdController::LayerConfig layer(LcdController::Layer::Layer0, LcdController::PixelFormat::L8, 0, 0, width, 272, buffer);
+    LcdController::LayerConfig layer(LcdController::Layer::Layer0, LcdController::PixelFormat::ARGB8888, 0, 0, width, 272, buffer);
     lcd.enable(layer);
     lcd.enable();
     lcdDisp.set();
