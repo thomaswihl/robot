@@ -31,8 +31,23 @@ int main()
      * NBL0-1: E0-1
      */
     sys.clockControl()->enable(ClockControl::Function::Fsmc);
-    sys.configAlternate("C3,D0-1,D8-10,D14-15,E0-1,E7-15,F0-5,F11-15,G0-1,G4-5,G8,G15,H3,H5", Gpio::AltFunc::FMC, Gpio::Speed::Fast, Gpio::Pull::Down);
+    sys.configAlternate("C3,D0-1,D8-10,D14-15,E0-1,E7-15,F0-5,F11-15,G0-1,G4-5,G8,G15,H3,H5", Gpio::AltFunc::FMC, Gpio::Speed::Fast, Gpio::Pull::Up);
     MemoryController mem(F7System::BaseAddress::FMC_CONTROL);
+    /*
+    FMC_Bank5_6->SDCR[0] = 0x000019E0;
+    burst, halfclock, cas latency 3, 4 banks, 32 bit
+    FMC_Bank5_6->SDTR[0] = 0x01116361;
+    TRCD=1, TRP=1, TWR=1, TRC=6, TRAS=3, TXSR=6, TMRD=1
+    */
+
+    MemoryController::SdRam ram(MemoryController::SdRam::Bank::Bank1,
+                                MemoryController::SdRam::CasLatency::Cycle2,
+                                MemoryController::SdRam::DataBus::Width16,
+                                MemoryController::SdRam::RowAddress::Bits12,
+                                MemoryController::SdRam::ColumnAddress::Bits8,
+                                MemoryController::SdRam::BankCount::Four);
+    ram.setTiming(2, 2, 2, 7, 4, 7, 2);
+    mem.sdRamConfig(&ram, nullptr, MemoryController::SdRamClock::OneHalf);
 
     /* LCD display */
     sys.clockControl()->setSaiClock(9000000);

@@ -68,6 +68,7 @@ public:
             I2C2 = 0x40005800,
             I2C3 = 0x40005C00,
             IWDG = 0x40003000,
+            MPU = 0xe000ed90,
             NVIC = 0xe000e100,
             PWR = 0x40007000,
             RCC = 0x40023800,
