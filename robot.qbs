@@ -23,6 +23,7 @@ Project {
         //cpp.linkerScripts: [ "stm32f407vg.ld" ]
         cpp.linkerScripts: [ "stm32f746g.ld" ]
         cpp.positionIndependentCode: false
+        cpp.defines: [ "STM32F7" ]
 
         Depends { name: "wos" }
 //        cpp.includePaths: [".", wos.sourceDirectory]
@@ -43,6 +44,7 @@ Project {
             "-mfpu=fpv4-sp-d16",
             "-mfloat-abi=softfp",
             "-nostartfiles",
+            "-Wl,-Map,/home/thomas/projects/own/stm32/robot/robot.map"
         ]
 
         Group {     // Properties for the produced executable

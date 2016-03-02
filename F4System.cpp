@@ -95,7 +95,7 @@ void F4System::init()
     // USART2 TX
     gpio('A')->configAlternate(Gpio::Index::Pin2, Gpio::AltFunc::USART2);
     // USART2 RX
-    gpio('A')->configAlternate(Gpio::Index::Pin3, Gpio::AltFunc::USART2, Gpio::Speed::Medium, Gpio::Pull::Down);
+    gpio('A')->configAlternate(Gpio::Index::Pin3, Gpio::AltFunc::USART2, Gpio::OutputType::PushPull, Gpio::Speed::Medium, Gpio::Pull::Down);
 
     mFlash.set(Flash::Feature::InstructionCache, true);
     mFlash.set(Flash::Feature::DataCache, true);
