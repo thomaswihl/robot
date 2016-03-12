@@ -14,6 +14,8 @@ Project {
             "F7System.cpp",
             "F7System.h",
             "main.cpp",
+            "touchcontroller.cpp",
+            "touchcontroller.h",
         ]
 
         cpp.warningLevel: "all"

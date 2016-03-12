@@ -9,6 +9,7 @@
 #include "memorycontroller.h"
 #include "i2c.h"
 #include "InterruptController.h"
+#include "touchcontroller.h"
 //#include "bild.h"
 
 static F7System sys;
@@ -177,17 +178,16 @@ int main()
                                   new InterruptController::Line(sys.mNvic, F7System::InterruptIndex::DMA1_Stream2)));
     i2c.configInterrupt(new InterruptController::Line(sys.mNvic, F7System::InterruptIndex::I2C3_EV),
                         new InterruptController::Line(sys.mNvic, F7System::InterruptIndex::I2C3_ER));
+
     // 0x40912732
     i2c.configMaster(100000, I2C::DutyCycle::Standard);
-    I2C::Transfer tr;
-    memset(&tr, 0, sizeof(tr));
-    tr.mAddress = 0x70;
-    const uint8_t tx[] = { 0x70 };
-    tr.mWriteData = tx;
-    tr.mWriteLength = 1;
-    tr.mReadData = new uint8_t[0x1f];
-    tr.mReadLength = 0x1f;
-    i2c.transfer(&tr);
+    TouchController tc(i2c, 0x70);
+    System::instance()->clockControl()->enable(ClockControl::Function::SysCfg);
+    sys.mSysCfg.extIntSource(Gpio::Index::Pin13, SysCfg::Gpio::I);
+    InterruptController::Line extInt10_15(sys.mNvic, F7System::InterruptIndex::EXTI15_10);
+    extInt10_15.setCallback(&sys.mExtI);
+    extInt10_15.enable();
+    tc.configInterrupt(new ExternalInterrupt::Line(sys.mExtI, 13));
 
     /* Command interpreter */
     CommandInterpreter interpreter(sys.mDebug);
@@ -203,13 +203,15 @@ int main()
     interpreter.add(new CmdMeasureClock(*sys.clockControl(), timer5));
     interpreter.start();
 
+    int counter = 0;
     while (true)
     {
         if (sys.waitForEvent(event) && event != nullptr)
         {
+            if ((counter % 2) == 0) tc.update();
             event->callback();
         }
-
+        ++counter;
     }
     return 0;
 }

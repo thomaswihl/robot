@@ -36,7 +36,7 @@ static const System::BaseAddress GPIO_ARRAY[] = {
 
 F7System::F7System() :
     System(BaseAddress::SCB, GPIO_ARRAY, sizeof(GPIO_ARRAY) / sizeof(GPIO_ARRAY[0]), BaseAddress::RCC),
-    mExtI(BaseAddress::EXTI, 23),
+    mExtI(BaseAddress::EXTI, 24),
     mNvic(BaseAddress::NVIC, 82),
     mSysTick(BaseAddress::STK, clockControl()),
     mSysCfg(BaseAddress::SYSCFG),
